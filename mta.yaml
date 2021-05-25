@@ -1,0 +1,89 @@
+_schema-version: "3.2"
+ID: connectonpremise-connectonpremise
+description: A Fiori application.
+version: 0.0.1
+modules:
+- name: connectonpremise-connectonpremise-dest-content
+  type: com.sap.application.content
+  requires:
+  - name: connectonpremise-connectonpremise-dest-connectivity
+  - name: connectonpremise-connectonpremise-dest-srv
+    parameters:
+      content-target: true
+  - name: connectonpremise-connectonpremise-repo-host
+    parameters:
+      service-key:
+        name: connectonpremise-connectonpremise-repo-host-key
+  - name: connectonpremise-connectonpremise-uaa
+    parameters:
+      service-key:
+        name: connectonpremise-connectonpremise-uaa-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: connectonpremise-connectonpremise_repo_host
+          ServiceInstanceName: connectonpremise-connectonpremise-html5-srv
+          ServiceKeyName: connectonpremise-connectonpremise-repo-host-key
+          sap.cloud.service: connectonpremise-connectonpremise
+        - Authentication: OAuth2UserTokenExchange
+          Name: connectonpremise-connectonpremise_uaa
+          ServiceInstanceName: connectonpremise-connectonpremise-xsuaa-srv
+          ServiceKeyName: connectonpremise-connectonpremise-uaa-key
+          sap.cloud.service: connectonpremise-connectonpremise
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+- name: connectonpremise-connectonpremise-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: connectonpremise-connectonpremise-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - connectonpremiseconnectonpremise.zip
+      name: connectonpremiseconnectonpremise
+      target-path: resources/
+- name: connectonpremiseconnectonpremise
+  type: html5
+  path: .
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: connectonpremise-connectonpremise-dest-srv
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: destination
+    service-name: connectonpremise-connectonpremise-dest-srv
+    service-plan: lite
+    path: ./destinations.json
+- name: connectonpremise-connectonpremise-dest-connectivity
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: connectivity   
+    service-plan: lite
+- name: connectonpremise-connectonpremise-uaa
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: connectonpremise-connectonpremise-xsuaa-srv
+    service-plan: application
+- name: connectonpremise-connectonpremise-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: connectonpremise-connectonpremise-html5-srv
+    service-plan: app-host
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true

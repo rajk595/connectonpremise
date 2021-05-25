@@ -1,0 +1,19 @@
+<mvc:View
+    controllerName="connectonpremise.connectonpremise.controller.View1"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+>
+	<Shell id="shell">
+		<App id="app">
+			<pages>
+				<Page id="page" title="{i18n>title}">
+					<content>
+                    <Button text="Press" press="onPress"></Button>
+                    <Text id="result" />
+                    </content>
+				</Page>
+			</pages>
+		</App>
+	</Shell>
+</mvc:View>

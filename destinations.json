@@ -1,0 +1,28 @@
+{
+  "HTML5Runtime_enabled": true,
+  "version": "1.0.0",
+  "init_data": {
+    "instance": {
+      "existing_destinations_policy": "update",
+      "destinations": [
+        {
+          "Name": "fpace",
+          "Description": "fpace",
+          "Authentication": "BasicAuthentication",
+          "ProxyType": "OnPremise",
+          "Type": "HTTP",
+          "URL": "https://fpace.cloud.com:443",
+          "HTML5.DynamicDestination": true
+        },
+        {
+          "Name": "ui5",
+          "Description": "ui5",
+          "Authentication": "NoAuthentication",
+          "ProxyType": "Internet",
+          "Type": "HTTP",
+          "URL": "https://ui5.sap.com"
+        }
+      ]
+    }
+  }
+}
